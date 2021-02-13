@@ -2,7 +2,7 @@
 # Kareem Taha
 # 2/12/2021
 #
-# Builds containers depending on filetypes and moves files to appropriate containers.
+# Builds containers depending on user settings and moves files to appropriate containers.
 import os
 import shutil
 import configparser
