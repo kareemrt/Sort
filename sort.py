@@ -6,7 +6,9 @@
 import os
 import shutil
 import configparser
-
+import geopy
+from geopy import Nominatim
+from picture import Picture, Image
 path = os.path.expanduser('~') + '\Downloads'
 extensions = {"folder":"folders",
             "exe":"executables",
@@ -36,6 +38,12 @@ def setPath(target):
     global path
     path = target
 def doNothing(): return
+def returnChildren():
+    printPath()
+    contents = os.listdir(path)
+    children = [item for item in contents if isDir(join(path, item))]
+    print(children)
+    return children
 
 def sort_dir():
     dir_contents = os.listdir()
@@ -78,9 +86,9 @@ def main():
     options = { "1": sort_dir, "2": print_dir, 
                 "3": change_dir, "4": edit_buckets,
                 "5": edit_ext, "6": reverse,
-                "7": doNothing}
+                "7": metadata, "8": doNothing}
     while(choice not in options):
-        choice = input("1. Sort CD\n2. Print CD\n3. Change CD\n4. Edit sorted buckets\n5. Edit target filetypes\n6. Reverse Sort\n7: Exit\n")
+        choice = input("1. Sort CD\n2. Print CD\n3. Change CD\n4. Edit sorted buckets\n5. Edit target filetypes\n6. Reverse Sort\n7. Metadata\n8. Exit\n")
     options[choice]()
 
 def change_dir():
@@ -96,16 +104,15 @@ def change_dir():
         temp = input("Enter Path: (.. to escape)")
         if isDir(temp): setPath(temp)
     elif choice == "Child Dir": # child dir
-        children = print_dir(dir_only = True, return_children=True) # list of child directories
+        children = returnChildren() # list of child directories
         
         temp = input("Enter a child dir (.. to escape)")
         if temp in children: setPath(join(path, temp))
     elif choice == "Parent Dir": path = os.path.dirname(path)
     main()
 
-def print_dir(dir_only = False, file_only = False, return_children = False): # print entire dir. can specificy to only print one type, or to return list of child dirs.
+def print_dir(dir_only = False, file_only = False): # print entire dir. can specificy to only print one type, or to return list of child dirs.
     contents = os.listdir(path)
-    children = []
     printPath()
     for item in contents:
         temp = join(path, item)
@@ -113,10 +120,8 @@ def print_dir(dir_only = False, file_only = False, return_children = False): # p
             if isFile(temp): print("File: " + item)
         elif dir_only:
             if isDir(path): print("Dir: " + item)
-            if return_children: children.append(item) 
         else: print(item)
     print("")
-    if return_children: return children
     main()
 
 def edit(buckets=False, filetypes=False, config=False):
@@ -167,6 +172,27 @@ def edit_ext():
         elif choice == 3: table.pop(ext)
     return
         
+def metadata():
+    dir_contents = os.listdir(path)
+    images = []
+    for image in dir_contents:
+        temp_path = join(path, image)
+        with open(temp_path, 'rb') as image_file:
+            my_image = Image(image_file)
+            images.append(my_image)
+    print(images[0].datetime)
+    for i in range(len(images)):
+        images[i] = Picture(images[i])
+        images[i].set_traits()
+    sort_md(images)
+    
+def sort_md(images_list):
+    md_buckets = []
+    loc = Nominatim(user_agent="Sorter")
+    
+        
+
+
 
 if __name__ == "__main__":
     main()
