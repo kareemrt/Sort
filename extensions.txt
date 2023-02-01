@@ -1,0 +1,14 @@
+folder:folders
+exe:executables
+bat:scripts
+py:scripts
+zip:archives
+rar:archives
+7z:archives
+tar:archives
+tgz:archives
+iso:disk-images
+pdf:documents
+docx:documents
+png:images
+jpeg:images
