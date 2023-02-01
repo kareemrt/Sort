@@ -4,6 +4,5 @@ def main():
     Cont = Container()                                              # create 'container' storing folders + file extensions
     Cont.set_extensions()                                           # (IO) read folders/exts from FILE 
     P = Path(path, container=Cont)                                  # create path object
-    P.print()                                                       
     P.main()
 if __name__ == "__main__": main()

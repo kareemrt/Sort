@@ -8,4 +8,4 @@
 * 1.2 - adds editing extensions and buckets. WIP: Moving edit/config functionality to .ini with file I/O
 * 1.3 - fixes a bug where the program would crash when a file already existed
 * 1.4 - adds reversing to a sort, optimizes code by factoring down and enhancing readability
-* 1.5 - removes config functionality, reduces code size via new Path/Container objects (Objects.py)
+* 1.5 - removes config library, reduces code size via new Path/Container objects (Objects.py)

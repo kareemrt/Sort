@@ -1,10 +1,10 @@
-import IO   # Objects.py - implimentation for 'Path' and 'Container' objects
+import IO.IO as IO   # Objects.py - implimentation for 'Path' and 'Container' objects
 import os
 import shutil
 def isDir(cd): return os.path.isdir(cd)
 def isFile(cd): return os.path.isfile(cd)
 def combinePath(cd, target): return os.path.join(cd, target)
-def makeDir(path): os.mkdir(path)
+def makeDir(path): os.mkdir(path=path)
 def removeDir(cd): os.removedirs(cd)
 helper_methods = [isDir, isFile, combinePath, makeDir, removeDir]
 IO_extensions, IO_folders = IO.IO_get_types()
@@ -27,12 +27,14 @@ class Path:
                 try: ext = item.rsplit(".",1)[1] # parse file extension
                 except IndexError: ext = ""; print("IndexError! File has no extension")
             elif item not in self.container.folders: ext = "folder" # item == dir
+            else: continue
 
             folder = self.container.extensions.get(ext, "unknown")
             new_path = combinePath(self.path, folder) # create new path to bucket using current file extension
-
-            try: shutil.move(old_path, new_path)
-            except shutil.Error: print("File already exists in target directory")
+            try: shutil.move(old_path, combinePath(new_path,item))
+            except shutil.Error: 
+                print("File already exists in target directory")
+                shutil.move(old_path, combinePath(new_path,f"COPY_{item}"))
     def reverse(self) -> None:
         '''Reverses a filetype path sort'''
         print("Reversing Sort...")
@@ -41,9 +43,14 @@ class Path:
             if f in self.container.folders:
                 f_path = combinePath(self.path, f)
                 f_contents = os.listdir(f_path)
-                for item in f_contents: shutil.move(combinePath(f_path, item), self.path) # move items outside folders
+                for item in f_contents:
+                    old_path = combinePath(f_path, item) 
+                    try: shutil.move(old_path, self.path) # move items outside folders
+                    except Exception:
+                        print("File already exists in target directory")
+                        shutil.move(old_path, combinePath(self.path,f"COPY_{item}"))
                 removeDir(f_path)
-    def print(self) -> None: print("CD: " + self.path)
+    def print(self) -> None: print("CD: " + self.path + "\n")
     def print_dir(self, dir = True, file = True) -> None:
         '''Prints the path's contents
             * dir - print dirs
@@ -75,6 +82,8 @@ class Path:
             case _: print("No valid options were selected\nExiting change_dir() method...")
     def main(self) -> None:
         '''Function to let user interact with Path methods'''
+        print("\n====\nSORT\n====")
+        self.print()
         match input("1. Sort CD\n2. Print CD\n3. Change CD\n4. Reverse Sort\n6. Edit folders\n6. Edit extensions\n7. Exit\n"):
             case "1": self.sort()
             case "2": self.print_dir()
@@ -85,7 +94,7 @@ class Path:
             case _: print("Exiting... (no valid option given)"); return
         self.main()
 class Container:
-    def __init__(self, folders = [], extensions = {}) -> None:
+    def __init__(self, folders = ["unknown"], extensions = {}) -> None:
         self.folders = folders
         self.extensions = extensions
         self.containers = {folder:[] for folder in folders}
@@ -93,7 +102,7 @@ class Container:
         if f not in self.folders:                                  # Create folder
             self.folders.append(f)
             self.containers[f] = []
-        if ext not in self.containers[f]: self.containers[f] = ext # Create folder:ext association
+        if ext not in self.containers[f]: self.containers[f].append(ext) # Create folder:ext association
         if ext not in self.extensions: self.extensions[ext] = f    # Create ext entry in dict{extensions}
         if file_save: IO.IO_add_type(ext, f) # save to file
     def set_extensions(self):
