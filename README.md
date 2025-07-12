@@ -9,3 +9,4 @@
 * 1.3 - fixes a bug where the program would crash when a file already existed
 * 1.4 - adds reversing to a sort, optimizes code by factoring down and enhancing readability
 * 1.5 - removes config library, reduces code size via new Path/Container objects (Objects.py)
+* 1.6 - code cleaning and refactoring into new separate modules (Folder, BinManager). Removed IO module.
