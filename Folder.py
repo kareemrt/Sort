@@ -22,6 +22,7 @@ class Folder:
             else: 
                 continue
 
+            print(item)
             target_bin = self.manager.get_config().get(file_ext, "unknown") 
             dest = self._path / target_bin / item.name # New item path
 
@@ -31,6 +32,7 @@ class Folder:
                 shutil.move(str(item.resolve()), str(dest.with_stem(dest.stem + "_SCOPY")))
             except Exception as e:
                 print(f"Error moving file {item.resolve()} to {dest}: {e}")
+                continue
 
     def reverse_sort(self) -> None:
         '''Reverses the folder sort'''
@@ -63,15 +65,19 @@ class Folder:
     def edit_path(self) -> None:
         '''Edit folder location path''' 
 
-        prompt = input("""1: By Path\n
-                       2: Child Dir\n
-                       3: Parent Dir\n
+        prompt = input("""
+                       1: By Path
+                       2: Child Dir
+                       3: Parent Dir
                        4: Exit\n""")
         match prompt:
 
             case "1": 
-                p = Path(input("Enter Path: (.. to escape)"))
-                if p.is_dir(): self._path = p
+                p = Path(input("Enter Path: (.. to escape)\n"))
+                if p.is_dir():
+                    print(f"Changed path to {p}")
+                    self._path = p
+                else: print("Path does not exist or ")
 
             case "2":
                 child_dirs = self.get_contents(include_files = False, log = True) # list of child directories

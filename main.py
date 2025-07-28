@@ -6,15 +6,15 @@ from Folder import Folder
 from BinManager import BinManager
 from pathlib import Path
 
+default_path = Path.home() / "Downloads" # default: downloads folder
+Manager = BinManager() # create 'container' storing folders + file extensions
+Dir = Folder(default_path, Manager)
+
 def main():
     '''Main function to run the SORT utility.'''
-
-    default_path = Path.home() / "Downloads" # default: downloads folder
-    Manager = BinManager() # create 'container' storing folders + file extensions
-    Dir = Folder(default_path, Manager)                                  # create path object
-    
-    print(f"""Current Path: {default_path}""")
-    prompt = input("""1. Sort CD
+    print(f"""\nCurrent Path: {Dir._path}\n""")
+    prompt = input("""
+                   1. Sort CD
                    2. Print CD
                    3. Change CD
                    4. Reverse Sort
@@ -54,8 +54,9 @@ def main():
     return True
 
 if __name__ == "__main__":
-    print(sys.version) 
-    print("""Welcome to SORT!\n
+    #print(sys.version) 
+    print("""
+            Welcome to SORT!\n
             This utility sorts files into folders based on file extensions.\n
             You can edit the file extension bindings in the config file or via the command line.\n
             You can also reverse the sort operation.\n

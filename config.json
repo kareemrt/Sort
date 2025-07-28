@@ -2,6 +2,7 @@
   "folder": "folders",
   "exe": "executables",
   "dmg": "executables",
+  "msi": "executables",
   "bat": "scripts",
   "py": "scripts",
   "h": "scripts",
@@ -23,5 +24,13 @@
   "jpeg": "images",
   "mp3": "music",
   "wav": "music",
-  "msi": "executables"
+  "flac": "music",
+  "m4a": "music",
+  "ogg": "music",
+  "mp4": "videos",
+  "mkv": "videos",
+  "mov": "videos",
+  "avi": "videos",
+  "webm": "videos",
+  "m4v": "videos"
 }
