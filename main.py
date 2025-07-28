@@ -1,7 +1,6 @@
 # main.py - Handles main logic for SORT: a file sorting utility.
 # Kareemrt | 7/11/25
 
-import sys
 from Folder import Folder
 from BinManager import BinManager
 from pathlib import Path
